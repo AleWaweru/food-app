@@ -1,5 +1,7 @@
 import React from "react";
 import Image from "next/image";
+import MenuItems from "./menus/MenuItems";
+import SectionMenu from "./menus/SectionMenu";
 
 function HomeMenu() {
   return (
@@ -19,21 +21,18 @@ function HomeMenu() {
         </div>
       </div>
       <div className="text-center">
-        <h3 className="uppercase text-gray-500 font-semibold leading-4">
-          Check out
-        </h3>
-        <h2 className="text-primary font-semibold italic text-4xl">Menu</h2>
+       <SectionMenu
+       subHeader={'check out'}
+       mainHeader={'Menu'}
+       />
       </div>
       <div className="grid grid-cols-3 gap-4 m-4">
-        <div className="bg-gray-300 p-4 rounded-lg text-center">
-          <img src="" alt="chips" />
-          <h4>Chips Masala</h4>
-          <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nisi porro
-            fugit eveniet facere quibusdam, quasi suscipit quis sequi aliquam
-            modi!
-          </p>
-        </div>
+       <MenuItems/>
+       <MenuItems/>
+       <MenuItems/>
+       <MenuItems/>
+       <MenuItems/>
+       <MenuItems/>
       </div>
     </section>
   );
