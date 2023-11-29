@@ -4,7 +4,7 @@ import Right from "./icons/arrow";
 function Hero() {
   return (
     <section className="hero mt-4">
-      <div className="py-12">
+      <div className="py-10">
         <h1 className="text-4xl font-semibold">
           Everything <br/>is Better <br/> with a <span className="text-primary">Pizza</span>
         </h1>
@@ -13,7 +13,7 @@ function Hero() {
           delicious joy in life{" "}
         </p>
         <div className="flex gap-4 text-sm">
-          <button className="bg-primary text-white px-7 py-2 uppercase rounded-full flex gap-2 items-center">
+          <button className="bg-primary text-white px-5 py-2 uppercase rounded-full flex gap-4 items-center">
             Order Now
             <Right />
           </button>

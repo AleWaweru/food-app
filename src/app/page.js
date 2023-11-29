@@ -1,7 +1,7 @@
 
-import Hero from "@/app/components/layout/Hero";
+import Hero from "./components/layout/Hero";
 import HomeMenu from "./components/layout/HomeMenu";
-import SectionMenu from "@/app/components/layout/menus/SectionMenu";
+import SectionMenu from "./components/layout/menus/SectionMenu";
 
 export default function Home() {
   return (
