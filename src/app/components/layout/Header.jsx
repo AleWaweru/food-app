@@ -1,7 +1,9 @@
-import React from 'react'
+import { useSession } from "next-auth/react";
 import Link from "next/link"
 
 const Header = () => {
+  const session = useSession();
+  console.log(session);
   return (
     <header className="flex text-center justify-between p-1">
     <nav className="flex gap-8 text-gray-500 items-center font-semibold">

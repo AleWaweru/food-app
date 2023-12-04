@@ -1,34 +1,36 @@
+import mongoose from "mongoose";
 import NextAuth from "next-auth"
+import bcrypt from "bcrypt";
 import CredentialsProvider from "next-auth/providers/credentials"
+import User from "../../../models/User"
 
 const handler = NextAuth({
+    secret: process.env.SECRET,
     providers: [
         CredentialsProvider({
             name: 'Credentials',
+            id: 'credentials',
             credentials: {
                 username: { label: "Email", type: "email", placeholder: "test@example.com" },
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials, req) {
-                // Your authentication logic goes here
-                const res = await fetch("/your/endpoint", {
-                    method: 'POST',
-                    body: JSON.stringify(credentials),
-                    headers: { "Content-Type": "application/json" }
-                });
-                const user = await res.json();
+                const email = credentials?.email;
+                const password = credentials?.password;
 
-                // If authentication is successful, return the user object
-                if (res.ok && user) {
+                mongoose.connect(process.env.MONGO_URL);
+                const user = await User.findOne({email});
+                const passwordOk = user && bcrypt.compareSync(password, user.password);
+
+                console.log({passwordOk});
+
+                if(passwordOk){
                     return user;
                 }
-
-                // Return null if authentication fails
-                return null;
+                return null
             }
         })
     ],
-    // Other NextAuth options...
 });
 
 export { handler as GET, handler as POST };
