@@ -3,17 +3,20 @@ import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 
 // Component Definition
 const ProfilePage = () => {
   // State Variables
-  const [userName, setUserName] = useState("");
-  const [saved, setSaved] = useState(false);
-  const [image, setImage] = useState("");
-  const [isSaving, setIsSaving] = useState(false);
-
-  // Session Hook
   const session = useSession();
+  console.log({session});
+  const [userName, setUserName] = useState('');
+  const [image, setImage] = useState('');
+  const [phone, setPhone] = useState('');
+  const [city, setCity] = useState('');
+  const [postal, setPostal] = useState('');
+  const [address, setAddress] = useState('');
+  const [country, setCountry] = useState('');
   const { status } = session;
 
   // Effect Hook to Update User Data on Authentication
@@ -21,25 +24,46 @@ const ProfilePage = () => {
     if (status === "authenticated") {
       setUserName(session.data.user.name);
       setImage(session.data.user.image);
+      fetch('/api/profile').then(response =>{
+        response.json().then(data => {
+          console.log(data);
+        })
+      })
     }
   }, [session, status]);
-
-  // Event Handler for Profile Name Submission
   async function handleProfileNameSubmit(e) {
     e.preventDefault();
-    setIsSaving(true);
-    setSaved(false);
-
-    await fetch("/api/profile", {
-      method: "PUT",
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify({ name: userName }),
+  
+    const savingPromise = new Promise(async (resolve, reject) => {
+      const response = await fetch("/api/profile", {
+        method: "PUT",
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify({
+          name: userName,
+          image,
+          phone,
+          city,
+          address,
+          postal,
+          country,
+        }),
+      });
+  
+      if (response.ok) {
+        resolve();
+      } else {
+        reject();
+      }
     });
-
-    setSaved(true);
-    setIsSaving(false);
+  
+    await toast.promise(savingPromise, {
+      loading: "Saving...",
+      success: "Profile saved!",
+      error: "Error",
+    });
   }
-
+  
+  
   // Event Handler for Profile Image Upload
   async function handleProfileImage(e) {
     const files = e.target.files;
@@ -72,17 +96,7 @@ const ProfilePage = () => {
     <section className="mt-8">
       <h1 className="text-center text-primary text-4xl mb-4">Profile</h1>
       <div className="max-w-md mx-auto">
-        {saved && (
-          <h1 className="text-center bg-green-100 p-4 rounded-lg border border-green-300">
-            Profile saved!
-          </h1>
-        )}
-        {isSaving && (
-          <h1 className="text-center bg-blue-100 p-4 rounded-lg border border-green-300">
-            Saving...
-          </h1>
-        )}
-        <div className="flex gap-2 items-center ">
+        <div className="flex gap-2">
           <div>
             <div className=" p-2 rounded-lg relative ">
               {image && (
@@ -101,7 +115,7 @@ const ProfilePage = () => {
                   type="file"
                   onChange={handleProfileImage}
                 />
-                <span className="block border border-gray-300 rounded-lg p-2 cursor-pointer">
+                <span className="block border border-gray-300 rounded-lg p-2 cursor-pointer ">
                   Edit
                 </span>
               </label>
@@ -119,6 +133,42 @@ const ProfilePage = () => {
               disabled="true"
               value={session.data.user.email}
             />
+
+            <input
+              type="tel"
+              placeholder="Phone"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Country"
+              value={country}
+              onChange={(e) => setCountry(e.target.value)}
+            />
+
+            <div className="flex gap-4">
+              <input
+                type="text"
+                placeholder="Postal Code"
+                value={postal}
+                onChange={(e) => setPostal(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="City"
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+              />
+            </div>
+
+            <input
+              type="text"
+              placeholder="Street Address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
+
             <button type="submit">Save</button>
           </form>
         </div>
@@ -127,5 +177,4 @@ const ProfilePage = () => {
   );
 };
 
-// Export Component
 export default ProfilePage;

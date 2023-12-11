@@ -3,6 +3,7 @@ import './globals.css'
 import Header from './components/layout/Header'
 import Footer from './components/layout/Footer'
 import AppProvider from './components/layout/appContext'
+import {Toaster} from "react-hot-toast";
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <main className='max-w-4xl mx-auto'>
           <AppProvider>
+          <Toaster />
           <Header/>
           {children}
           <Footer/>

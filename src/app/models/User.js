@@ -4,6 +4,12 @@ const UserSchema = new Schema({
     name: {type: String},
     email: { type: String, required: true, unique: true },
     password: {type: String, required: true},
+    image: {type: String},
+    phone: {type: String},
+    city: {type: String},
+    address: {type: String},
+    postal: {type: String},
+    country: {type: String},
 }, 
 { timestamps: true });
 
