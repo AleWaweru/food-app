@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import UserTabs from "../components/layout/UserTabs";
+import EditableImage from "@/app/components/layout/EditableImage"
 
 // Component Definition
 const ProfilePage = () => {
@@ -84,23 +85,7 @@ const ProfilePage = () => {
   }
 
   // Event Handler for Profile Image Upload
-  async function handleProfileImage(e) {
-    const files = e.target.files;
-
-    if (files?.length === 1) {
-      const data = new FormData();
-      data.set("file", files[0]);
-
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: data,
-      });
-
-      const link = await response.json();
-      console.log(link);
-      setImage(link);
-    }
-  }
+  
 
   // Render
   if (status === "loading" || !profileFetched) {
@@ -118,26 +103,7 @@ const ProfilePage = () => {
         <div className="flex gap-2">
           <div>
             <div className=" p-2 rounded-lg relative ">
-              {image && (
-                <Image
-                  className="rounded-lg w-full h-full mb-1"
-                  src={image}
-                  width={80}
-                  height={80}
-                  alt={"avatar"}
-                />
-              )}
-
-              <label>
-                <input
-                  className="hidden"
-                  type="file"
-                  onChange={handleProfileImage}
-                />
-                <span className="block border border-gray-300 rounded-lg p-2 cursor-pointer ">
-                  Edit
-                </span>
-              </label>
+           <EditableImage link={image} setlink={setImage}/>
             </div>
           </div>
           <form onSubmit={handleProfileNameSubmit} className="grow">
