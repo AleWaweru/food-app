@@ -11,13 +11,12 @@ export default function EditableImage({ link, setLink }) {
       const uploadPromise = fetch('/api/upload', {
         method: 'POST',
         body: data,
-      }).then(async response => {
+      }).then (async response => {
         if (response.ok) {
-          return response.json().then(link => {
-            setLink(link);
-          })
+          const link = await response.json();
+          setLink(link);
         }
-        throw new Error(`Something went wrong: ${response.statusText}. Server response: ${await response.text()}`);
+        throw new Error('Something went wrong');
       });
 
       await toast.promise(uploadPromise, {
