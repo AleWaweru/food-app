@@ -17,6 +17,8 @@
 /build
 
 # misc
+.env
+.idea
 .DS_Store
 *.pem
 
