@@ -36,13 +36,13 @@ export async function POST(req) {
       }));
 
       const link = 'https://' + bucket + '.s3.amazonaws.com/' + newFileName;
-
       console.log('File uploaded successfully. Link:', link);
-
       return Response.json(link);
     } catch (error) {
       console.error('Error uploading file to S3:', error);
       return Response.json({ error: 'File upload failed.' }, { status: 500 });
+    } finally {
+      console.log('Upload process completed.');
     }
   }
 

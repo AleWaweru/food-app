@@ -1,70 +1,46 @@
 import Image from "next/image";
 import toast from "react-hot-toast";
 
-export default function EditableImage({ link, setlink }) {
+export default function EditableImage({ link, setLink }) {
   async function handleProfileImage(e) {
     const files = e.target.files;
-
     if (files?.length === 1) {
-      const data = new FormData();
-      data.set("file", files[0]);
+      const data = new FormData;
+      data.set('file', files[0]);
 
-      const uploadPromise = fetch("/api/upload", {
-        method: "POST",
+      const uploadPromise = fetch('/api/upload', {
+        method: 'POST',
         body: data,
-      })
-        .then((response) => {
-          if (response.ok) {
-            return response.json().then((link) => {
-              setlink(link);
-            });
-          }
-          throw new Error("Response not OK");
-        })
-        .catch((error) => {
-          console.error("Error during file upload:", error);
-          throw error; // Rethrow the error to propagate it for the toast promise
-        });
+      }).then(async response => {
+        if (response.ok) {
+          return response.json().then(link => {
+            setLink(link);
+          })
+        }
+        throw new Error(`Something went wrong: ${response.statusText}. Server response: ${await response.text()}`);
+      });
 
-      try {
-        await toast.promise(uploadPromise, {
-          loading: "Uploading...",
-          success: "Profile saved!",
-          error: (errorDetails) => {
-            // Handle the error message based on errorDetails
-            console.error("Error saving profile:", errorDetails);
-            return "Profile save failed.";
-          },
-        });
-      } catch (error) {
-        console.error("Error during toast promise:", error);
-      }
+      await toast.promise(uploadPromise, {
+        loading: 'Uploading...',
+        success: 'Upload complete',
+        error: 'Upload error',
+      });
     }
   }
 
   return (
     <>
       {link && (
-        <Image
-          className="rounded-lg w-full h-full mb-1"
-          src={link}
-          width={80}
-          height={80}
-          alt={"avatar"}
-        />
+        <Image className="rounded-lg w-full h-full mb-1" src={link} width={250} height={250} alt={'avatar'} />
       )}
-
       {!link && (
-        <div className="bg-gray-200 p-4 text-gray-500 rounded-lg mb-1">
+        <div className="text-center bg-gray-200 p-4 text-gray-500 rounded-lg mb-1">
           No image
         </div>
       )}
-
       <label>
-        <input className="hidden" type="file" onChange={handleProfileImage} />
-        <span className="block border border-gray-300 rounded-lg p-2 cursor-pointer ">
-          Edit
-        </span>
+        <input type="file" className="hidden" onChange={handleProfileImage} />
+        <span className="block border border-gray-300 rounded-lg p-2 text-center cursor-pointer">Change image</span>
       </label>
     </>
   );
