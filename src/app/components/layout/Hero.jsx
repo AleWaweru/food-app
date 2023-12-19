@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Right from "./icons/arrow";
+import Right from "./icons/arrowRight";
 
 function Hero() {
   return (

@@ -1,12 +1,14 @@
 import {PutObjectCommand, S3Client} from "@aws-sdk/client-s3";
 import uniqid from 'uniqid';
+import mongoose from "mongoose";
 
 export async function POST(req) {
+  mongoose.connect(process.env.MONGO_URL)
   const data =  await req.formData();
   if (data.get('file')) {
     // upload the file
     const file = data.get('file');
-
+ 
     const s3Client = new S3Client({
       region: 'us-east-1',
       credentials: {

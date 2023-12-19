@@ -101,7 +101,7 @@ export default function Categories() {
               setEditCategory(c);
               setCategoryName(c.name);
           }}
-              className="bg-gray-200 rounded-xl p-2 my-3 px-4 flex gap-1 cursor-pointer"
+              className="rounded-xl p-2 my-3 px-4 flex gap-1 cursor-pointer"
               key={c.id}
             >
               <span>{c.name}</span>

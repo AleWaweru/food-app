@@ -1,41 +1,64 @@
-"use client"
+"use client";
+import { useProfile } from "../components/layout/Useprofile";
 import UserTabs from "../components/layout/UserTabs";
-import {useProfile} from "@/app/components/layout/Useprofile";
-import EditableImage from "../components/layout/EditableImage";
-import { useState } from "react";
+import Link from "next/link";
+import Right from "@/app/components/layout/icons/arrowRight";
+import { useEffect, useState } from "react";
+import Image from "next/image";
 
-export default function MenuItems () {
-    const {loading, data} = useProfile();
-    const [image, setImage] = useState();
+export default function MenuItemsPage() {
+  const [menuItems, setMenuItems] = useState([]);
+  const { loading, data } = useProfile();
 
-    if(loading){
-        return 'Loading user info'
-    }
+  useEffect(() => {
+    fetch("/api/menu-items").then((res) => {
+      res.json().then((menuItems) => {
+        setMenuItems(menuItems);
+      });
+    });
+  }, []);
 
-    if(!data.admin){
-        return 'Not an admin.';
-    }
-    return (
-        <section className="mt-8">
-            <UserTabs isadmin={true}/>
-            <form className="mt-8 max-w-md mx-auto">
-                <div className="flex gap-2 items-start">
-                    <div>
-                        <EditableImage link={image} setlink={setImage}/>
-                    </div>
-                    <div className="grow">
-                        <label>Item name</label>
-                        <input type="text"/>
-                        <label>Description</label>
-                        <input type="text"/>
-                        <label>Base Price</label>
-                        <input type="text"/>
-                        <button type="submit">Save</button>
-                    </div>
-                </div>
+  if (loading) {
+    return "Loading user info...";
+  }
 
-            </form>
+  if (!data.admin) {
+    return "Not an admin.";
+  }
 
-        </section>
-    );
+  return (
+    <section className="mt-8 max-w-md mx-auto">
+      <UserTabs isadmin={true} />
+      <div className="mt-8">
+        <Link className="button" href={"/menu-items/new"}>
+          Create new Item
+          <Right />
+        </Link>
+        <div>
+          <h2 className="text-sm text-gray-500 mt-4">Edit Menu Items</h2>
+          <div className="grid grid-cols-4 gap-2">
+            {menuItems?.length > 0 &&
+              menuItems.map((item) => (
+                <Link
+                  key={item._id}
+                  href={"/menu-items/edit/" + item._id}
+                  className="bg-gray-200 rounded-lg p-4"
+                >
+                  <div className="relative">
+                    <Image
+                      className="rounded-md"
+                      src={item.image}
+                      alt={"image"}
+                      width={200}
+                      height={200}
+                    />
+                  </div>
+                  <div className="text-center">{item.name}</div>
+                </Link>
+              ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }
