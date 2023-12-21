@@ -5,34 +5,27 @@ import toast from "react-hot-toast";
 import UserTabs from "@/app/components/layout/UserTabs";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { redirect, useParams } from 'next/navigation';
-import MenuItemForm from '@/app/components/layout/MenuItemForm'
+import { redirect, useParams } from "next/navigation";
+import MenuItemForm from "@/app/components/layout/MenuItemForm";
 
-export default function EditPage () {
-  const {id} = useParams();
+export default function EditPage() {
+  const { id } = useParams();
   const [redirectToMenuList, setRedirectToMenuList] = useState(false);
   const { loading, data } = useProfile();
   const [menuItem, setMenuItem] = useState(null);
 
   useEffect(() => {
-    fetch('/api/menu-items').then(res => {
-      res.json().then(items => {
-        const item = items.find(i => i._id === id);
+    fetch("/api/menu-items").then((res) => {
+      res.json().then((items) => {
+        const item = items.find((i) => i._id === id);
         setMenuItem(item);
-        
       });
     });
-  },[])
+  }, []);
 
-  async function handleFormSubmit(e) {
+  async function handleFormSubmit(e, data) {
     e.preventDefault();
-    const data = {
-      image,
-      name,
-      description,
-      price,
-      _id:id,
-    };
+    data = { ...data, _id: id };
     const savingPromise = new Promise(async (resolve, reject) => {
       const response = await fetch("/api/menu-items", {
         method: "PUT",
@@ -52,8 +45,8 @@ export default function EditPage () {
     setRedirectToMenuList(true);
   }
 
-  if(redirectToMenuList){
-    return redirect('/menu-items')
+  if (redirectToMenuList) {
+    return redirect("/menu-items");
   }
 
   if (loading) {
@@ -72,9 +65,8 @@ export default function EditPage () {
           <Left />
           <span>Show all menu items</span>
         </Link>
-        <MenuItemForm menuItems={menuItem}/>
+        <MenuItemForm menuItems={menuItem} onSubmit={handleFormSubmit} />
       </div>
-      
     </section>
   );
 }

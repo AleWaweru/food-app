@@ -7,24 +7,16 @@ import EditableImage from "../../components/layout/EditableImage";
 import { useState } from "react";
 import Link from "next/link";
 import { redirect } from 'next/navigation';
+import MenuItemForm from "@/app/components/layout/MenuItemForm";
 
 export default function NewMenuItemPage() {
-  const [image, setImage] = useState();
-  const [name, setName] = useState();
-  const [description, setDescription] = useState();
-  const [price, setPrice] = useState();
+
   const [redirectToMenuList, setRedirectToMenuList] = useState(false);
 
   const { loading, data } = useProfile();
 
-  async function handleFormSubmit(e) {
+  async function handleFormSubmit(e, data) {
     e.preventDefault();
-    const data = {
-      image,
-      name,
-      description,
-      price,
-    };
     const savingPromise = new Promise(async (resolve, reject) => {
       const response = await fetch("/api/menu-items", {
         method: "POST",
@@ -65,34 +57,7 @@ export default function NewMenuItemPage() {
           <span>Show all menu items</span>
         </Link>
       </div>
-      <form onSubmit={handleFormSubmit} className="mt-8 max-w-md mx-auto">
-        <div className="flex gap-2 items-start">
-          <div className="max-w-[200px]">
-            <EditableImage link={image} setlink={setImage} />
-          </div>
-          <div className="grow">
-            <label>Item name</label>
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              type="text"
-            />
-            <label>Description</label>
-            <input
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              type="text"
-            />
-            <label>Base Price</label>
-            <input
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              type="text"
-            />
-            <button type="submit">Save</button>
-          </div>
-        </div>
-      </form>
+      <MenuItemForm menuItems={null} onSubmit={handleFormSubmit}/>
     </section>
   );
 }

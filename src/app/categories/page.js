@@ -13,7 +13,6 @@ export default function Categories() {
 
   useEffect(() => {
     fetchCategories();
-   
   }, []);
 
   function fetchCategories() {
@@ -22,15 +21,14 @@ export default function Categories() {
         setCategories(categories);
       });
     });
-
   }
 
   async function handleNewCategory(e) {
     e.preventDefault();
     const creationPromise = new Promise(async (resolve, reject) => {
       const data = { name: CategoryName };
-      
-      if(editCategory){
+
+      if (editCategory) {
         data._id = editCategory._id;
       }
       const response = await fetch("/api/categories", {
@@ -39,7 +37,7 @@ export default function Categories() {
         headers: { "Content-Type": "application/json" },
       });
 
-      setCategoryName('');
+      setCategoryName("");
       fetchCategories();
       setEditCategory(null);
 
@@ -48,8 +46,10 @@ export default function Categories() {
     });
 
     await toast.promise(creationPromise, {
-      loading: editCategory ? "Category Updating...": "Creating new Category...",
-      success: editCategory ? "Category Updated...": "Category created",
+      loading: editCategory
+        ? "Category Updating..."
+        : "Creating new Category...",
+      success: editCategory ? "Category Updated..." : "Category created",
       error: (errorDetails) => {
         // Handle the error message based on errorDetails
         console.error("Error saving category:", errorDetails);
@@ -74,10 +74,13 @@ export default function Categories() {
       <form onSubmit={handleNewCategory} className="mt-8">
         <div className="flex gap-2 items-end">
           <div className="grow">
-            <label>{editCategory ? 'Update Category' : 'New Category name'}
-            {editCategory && (
-              <>: <b>{editCategory.name}</b></>
-            )}
+            <label>
+              {editCategory ? "Update Category" : "New Category name"}
+              {editCategory && (
+                <>
+                  : <b>{editCategory.name}</b>
+                </>
+              )}
             </label>
             <input
               value={CategoryName}
@@ -86,26 +89,32 @@ export default function Categories() {
             />
           </div>
           <div className="pb-4">
-            <button type="submit">
-              {editCategory ? 'Update' : 'Create'}
-            </button>
+            <button type="submit">{editCategory ? "Update" : "Create"}</button>
           </div>
         </div>
       </form>
 
-      <div>
-        <h1 className="mt-8 text-sm text-gray-500">Edit Categories</h1>
+      <div >
+        <h2 className="mt-8 text-sm text-gray-500">List of Categories</h2>
         {categories?.length > 0 &&
           categories.map((c) => (
-            <button onClick={()=> {
-              setEditCategory(c);
-              setCategoryName(c.name);
-          }}
-              className="rounded-xl p-2 my-3 px-4 flex gap-1 cursor-pointer"
+            <div
+            className="bg-gray-100 rounded-xl p-2 px-4 flex gap-1 mb-1 items-center"
               key={c.id}
             >
-              <span>{c.name}</span>
-            </button>
+              <div
+              className="grow hover:underline cursor-pointer"
+                onClick={() => {
+                  setEditCategory(c);
+                  setCategoryName(c.name);
+                }}
+              >
+                {c.name}</div>
+                <div className="gap-1 flex ">
+                  <button type="button">Edit</button>
+                  <button type="button">Delete</button>
+                </div>
+              </div>
           ))}
       </div>
     </section>

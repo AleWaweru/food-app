@@ -1,11 +1,18 @@
 import { Schema, model, models } from "mongoose";
 
+const extraPriceSchema = new Schema({
+  name: String,
+  price: Number,
+});
+
 const MenuItemSchema = new Schema(
   {
     image: { type: String },
     name: { type: String },
     description: { type: String },
     price: { type: Number },
+    sizes: {type:[extraPriceSchema]},
+    extraIngredientPrices: {type:[extraPriceSchema]},
   },
   { timestamps: true }
 );
