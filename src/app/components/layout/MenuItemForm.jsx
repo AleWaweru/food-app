@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EditableImage from "../layout/EditableImage";
 import MenuItemPriceProp from "@/app/components/layout/MenuItemPriceProp";
 
@@ -8,9 +8,19 @@ export default function MenuItemForm({ onSubmit, menuItems }) {
   const [description, setDescription] = useState(menuItems?.description || "");
   const [price, setPrice] = useState(menuItems?.price || "");
   const [sizes, setSizes] = useState(menuItems?.sizes || []);
+  const [category, setCategory] = useState(menuItems?.category || "");
+  const [categories, setCategories] = useState([]);
   const [extraIngredientPrices, setExtraIngredientPrices] = useState(
     menuItems?.extraIngredientPrices || []
   );
+
+  useEffect(() => {
+    fetch("/api/categories").then((res) => {
+      res.json().then((categories) => {
+        setCategories(categories);
+      });
+    });
+  }, []);
 
   return (
     <form
@@ -22,6 +32,7 @@ export default function MenuItemForm({ onSubmit, menuItems }) {
           price,
           sizes,
           extraIngredientPrices,
+          category,
         })
       }
       className="mt-8 max-w-md mx-auto"
@@ -43,6 +54,19 @@ export default function MenuItemForm({ onSubmit, menuItems }) {
             onChange={(e) => setDescription(e.target.value)}
             type="text"
           />
+          <label>Category</label>
+          <select
+            value={category}
+            onChange={(ev) => setCategory(ev.target.value)}
+          >
+            {categories?.length > 0 &&
+              categories.map((c) => (
+                <option key={c._id} value={c._id}>
+                  {c.name}
+                </option>
+              ))}
+          </select>
+
           <label>Base Price</label>
           <input
             value={price}

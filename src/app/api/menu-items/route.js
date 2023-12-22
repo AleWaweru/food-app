@@ -22,3 +22,11 @@ export async function GET() {
     );
 
 }
+
+export async function DELETE(req) {
+    mongoose.connect(process.env.MONGO_URL);
+    const url = new URL(req.url);
+    const _id = url.searchParams.get('_id');
+    await MenuItems.deleteOne({_id});
+    return Response.json(true);
+}

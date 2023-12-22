@@ -3,6 +3,7 @@ import UserTabs from "../components/layout/UserTabs";
 import { useProfile } from "../components/layout/Useprofile";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import DeleteButton from "@/app/components/DeleteButton";
 
 export default function Categories() {
   const { loading: profileLoading, data: profileData } = useProfile();
@@ -58,6 +59,29 @@ export default function Categories() {
     });
   }
 
+  async function handleDeleteClick(_id) {
+    const promise = new Promise(async (resolve, reject) => {
+      const response = await fetch("/api/categories?_id=" + _id, {
+        method: "DELETE",
+      });
+
+      console.log(response);
+      if (response.ok) {
+        resolve();
+      } else {
+        reject();
+      }
+    });
+
+    await toast.promise(promise, {
+      loading: "Deleting...",
+      success: "Deleted",
+      error: "Error",
+    });
+
+    fetchCategories();
+  }
+
   // Loading state
   if (profileLoading) {
     return "Loading user info...";
@@ -88,33 +112,45 @@ export default function Categories() {
               type="text"
             />
           </div>
-          <div className="pb-4">
+          <div className="pb-4 flex gap-2">
             <button type="submit">{editCategory ? "Update" : "Create"}</button>
+            <button
+              type="button"
+              onClick={() => {
+                setEditCategory(null);
+                setCategoryName("");
+              }}
+            >
+              Cancel
+            </button>
           </div>
         </div>
       </form>
 
-      <div >
+      <div>
         <h2 className="mt-8 text-sm text-gray-500">List of Categories</h2>
         {categories?.length > 0 &&
           categories.map((c) => (
             <div
-            className="bg-gray-100 rounded-xl p-2 px-4 flex gap-1 mb-1 items-center"
+              className="bg-gray-100 rounded-xl p-2 px-4 flex gap-1 mb-1 items-center"
               key={c.id}
             >
-              <div
-              className="grow hover:underline cursor-pointer"
-                onClick={() => {
-                  setEditCategory(c);
-                  setCategoryName(c.name);
-                }}
-              >
-                {c.name}</div>
-                <div className="gap-1 flex ">
-                  <button type="button">Edit</button>
-                  <button type="button">Delete</button>
-                </div>
+              <div className="grow ">{c.name}</div>
+              <div className="gap-1 flex ">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditCategory(c);
+                    setCategoryName(c.name);
+                  }}
+                >
+                  Edit
+                </button>
+                <DeleteButton label="Delete"
+                onDelete={() => handleDeleteClick(c._id)}
+                />
               </div>
+            </div>
           ))}
       </div>
     </section>
