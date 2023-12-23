@@ -35,11 +35,11 @@ export default function MenuItemForm({ onSubmit, menuItems }) {
           category,
         })
       }
-      className="mt-8 max-w-md mx-auto"
+      className="mt-8 max-w-2xl mx-auto"
     >
       <div className="flex gap-2 items-start">
         <div className="max-w-[200px]">
-          <EditableImage link={image} setlink={setImage} />
+        <EditableImage link={image} setLink={setImage} />
         </div>
         <div className="grow">
           <label>Item name</label>
