@@ -18,7 +18,7 @@ const ProfilePage = () => {
   // Effect Hook to Update User Data on Authentication
   useEffect(() => {
     if (status === "authenticated") {
-      fetch("/api/profile").then((response) => {
+      fetch("/api/profile").then(response => {
         response.json().then((data) => {
           setUser(data);
           setIsAdmin(data.admin);

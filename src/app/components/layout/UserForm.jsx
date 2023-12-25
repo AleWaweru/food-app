@@ -2,15 +2,19 @@
 
 import { useState } from "react";
 import EditableImage from "@/app/components/layout/EditableImage";
+import { useProfile } from "./Useprofile";
 
-export default function UserForm({user, onSave}) {
-  const [userName, setUserName] = useState(user?.name || '');
-  const [image, setImage] = useState(user?.image || '');
-  const [phone, setPhone] = useState(user?.phone || '');
-  const [city, setCity] = useState(user?.city || '');
-  const [postal, setPostal] = useState(user?.postal || '');
-  const [address, setAddress] = useState(user?.address || '');
-  const [country, setCountry] = useState(user?.country || '');
+export default function UserForm({ user, onSave }) {
+  const [userName, setUserName] = useState(user?.name || "");
+  const [image, setImage] = useState(user?.image || "");
+  const [phone, setPhone] = useState(user?.phone || "");
+  const [city, setCity] = useState(user?.city || "");
+  const [postal, setPostal] = useState(user?.postal || "");
+  const [address, setAddress] = useState(user?.address || "");
+  const [country, setCountry] = useState(user?.country || "");
+  const [admin, setAdmin] = useState(user?.admin || false);
+  const { data: loggedInUserData } = useProfile();
+
   return (
     <div className="flex gap-2">
       <div>
@@ -18,11 +22,21 @@ export default function UserForm({user, onSave}) {
           <EditableImage link={image} setLink={setImage} />
         </div>
       </div>
-      <form onSubmit={e => onSave(e, {
-        name:userName, image, phone, address, city, country, postal, 
-
-      })} 
-      className="grow">
+      <form
+        onSubmit={(e) =>
+          onSave(e, {
+            name: userName,
+            image,
+            phone,
+            address,
+            city,
+            admin,
+            country,
+            postal,
+          })
+        }
+        className="grow"
+      >
         <label>First and LastName</label>
         <input
           value={userName}
@@ -41,15 +55,7 @@ export default function UserForm({user, onSave}) {
           onChange={(e) => setPhone(e.target.value)}
         />
 
-        <label>Country</label>
-        <input
-          type="text"
-          placeholder="Country"
-          value={country}
-          onChange={(e) => setCountry(e.target.value)}
-        />
-
-        <div className="flex gap-14">
+        <div className="grid grid-cols-2 gap-10">
           <div>
             <label>Postal Code</label>
             <input
@@ -78,6 +84,34 @@ export default function UserForm({user, onSave}) {
           value={address}
           onChange={(e) => setAddress(e.target.value)}
         />
+
+        <label>Country</label>
+        <input
+          type="text"
+          placeholder="Country"
+          value={country}
+          onChange={(e) => setCountry(e.target.value)}
+        />
+
+        {loggedInUserData.admin && (
+          <div>
+            <label
+              className="p-2 flex item-center gap-2 mb-2 inline-flex"
+              htmlFor="adminCb"
+            >
+              <input
+                id="adminCb"
+                type="checkbox"
+                className=""
+                value={"1"}
+                checked={admin}
+                onChange={(e) => setAdmin(e.target.checked)}
+              />
+
+              <span>Admin</span>
+            </label>
+          </div>
+        )}
 
         <button type="submit">Save</button>
       </form>

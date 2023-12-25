@@ -6,10 +6,10 @@ function Hero() {
     <section className="hero mt-4">
       <div className="py-10">
         <h1 className="text-4xl font-semibold">
-          Everything <br/>is Better <br/> with a <span className="text-primary">Pizza</span>
+          Life<br/>is Better <br/> with a <br/>Hot Delicious <br/>  <span className="text-primary">MEAL</span>
         </h1>
         <p className="my-4 text-gray-500">
-          Pizza is a missing piece that makes every day completes, a simple yet
+          A meal is a missing piece that makes every day complete, a simple yet
           delicious joy in life{" "}
         </p>
         <div className="flex gap-4 text-sm">
