@@ -6,11 +6,22 @@ import { useContext, useEffect, useState } from "react";
 import Trash from "../components/layout/icons/trash";
 import AddressInputs from "../components/layout/AddressInputs";
 import { useProfile } from "../components/layout/Useprofile";
+import toast from "react-hot-toast";
+import CartProduct from "@/app/components/layout/CartProduct"
 
 export default function CartPage() {
   const { cartProducts, removeCartProduct } = useContext(CartContext);
   const [address, setAddress] = useState({});
   const {data:profileData} = useProfile();
+
+  useEffect(() =>{
+    if (typeof window !== 'undefined') {
+      if(window.location.href.includes('canceled')){
+        toast.error('Payment failed 😔')
+      }
+    }
+
+  }, []);
 
   useEffect(() => {
     if(profileData?.city){
@@ -26,13 +37,53 @@ export default function CartPage() {
     }
   }, [profileData]);
 
-  let total = 0;
+  let subtotal = 0;
   for (const p of cartProducts) {
-    total += cartProductPrice(p);
+    subtotal += cartProductPrice(p);
   }
 
   function handleAddressChange(propName, value) {
     setAddress(prevAddress => ({...prevAddress, [propName]:value}));
+  }
+
+  async function proceedToCheckout(ev){
+    ev.preventDefault();
+
+    const promise = new Promise((resolve, reject) => {
+      fetch('/api/checkout', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          address,
+          cartProducts,
+        }),
+      }).then(async(response) => {
+
+        if(response.ok){
+          resolve();
+          window.location = await response.json();
+        }else{
+          reject();
+        }
+      });
+
+    });
+    toast.promise(promise, {
+      loading: 'Preparing your order...',
+      success: 'Redirecting to payment...',
+      Error: 'Something went wrong... Please try again later',
+    })
+ 
+   
+  }
+
+  if(cartProducts?.length === 0){
+    return(
+      <section className="mt-8 text-center">
+         <SectionMenu mainHeader={"Cart"} />
+         <p className="mt-4">Your Shopping cart is empty 😔</p>
+      </section>
+    )
   }
 
   return (
@@ -47,56 +98,29 @@ export default function CartPage() {
           {cartProducts === 0 && <div>No products in you shopping Cart</div>}
           {cartProducts?.length > 0 &&
             cartProducts.map((product, index) => (
-              <div className="flex items-center gap-4  border-b py-2">
-                <div className="w-24">
-                  <Image width={240} height={240} src={product.image} alt="" />
-                </div>
-
-                <div className="grow">
-                  <h3 className="font-semibold"> {product.name}</h3>
-                  {product.size && (
-                    <div className="text-sm text-gray-800">
-                      Size:
-                      <span>{product.size.name}</span>
-                    </div>
-                  )}
-                  {product.extras?.length > 0 && (
-                    <div className="text-sm text-gray-500">
-                      {product.extras.map((extra) => (
-                        <div>
-                          Extra {extra.name} ${extra.price}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-                <div className="text-lg font-semibold">
-                  ${cartProductPrice(product)}
-                </div>
-                <div className="ml-2">
-                  <button
-                    type="button"
-                    onClick={() => removeCartProduct(index)}
-                    className="p-2"
-                  >
-                    <Trash />
-                  </button>
-                </div>
-              </div>
+            <CartProduct product= {product} onRemove={removeCartProduct}/>
             ))}
-          <div className="py-4 text-right pr-16">
-            <span className="text-gray-500">Subtotal:</span>
-            <span className="text-lg font-semibold pl-2">${total}</span>
+          <div className="py-2 justify-end flex pr-16 items-center">
+            <div className="text-gray-500">
+              Subtotal:<br/>
+              Delivery: <br/>
+              Total: 
+            </div>
+            <div className=" font-semibold pl-2 text-right">
+              ${subtotal}<br/>
+              $5<br/>
+              ${subtotal+5}
+              </div>
           </div>
         </div>
         <div className="bg-gray-100 p-4 rounded-lg">
-          <h2>Checkoout</h2>
-          <form>
+          <h2>Checkout</h2>
+          <form onSubmit={proceedToCheckout}>
             <AddressInputs
                addressProps={address}
                setAddressProps={handleAddressChange}
             />
-            <button type="submit">Pay ${total}</button>
+            <button type="submit">Pay ${subtotal+5}</button>
           </form>
         </div>
       </div>
