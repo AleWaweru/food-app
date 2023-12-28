@@ -1,8 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import SectionMenu from "../components/layout/menus/SectionMenu";
 import UserTabs from "../components/layout/UserTabs";
 import { useProfile } from "../components/layout/Useprofile";
+import dbTimeForHuman from "@/app/lib/dateTime";
 
 export default function OrderPage() {
   const [orders, setOrders] = useState([]);
@@ -10,28 +10,38 @@ export default function OrderPage() {
 
   useEffect(() => {
     fetch("/api/orders")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP error! Status: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((orders) => {
-        setOrders(orders);
-      })
-      .catch((error) => {
-        console.error("Error fetching orders:", error);
+      .then((res) => res.json())
+      .then(orders => {
+        console.log(orders);
+        setOrders(orders.reverse());
       });
   }, []);
 
   return (
     <section className="mt-8 max-w-2xl mx-auto">
       <UserTabs isadmin={profile.admin} />
-      <div className="text-center">
-        <SectionMenu mainHeader={"Orders"} />
+
+      <div className="mt-8">
+        {orders?.length > 0 &&
+          orders.map(order => (
+            <div key={order._id} className="bg-gray-100 mb-2 p-4 rounded-lg grid grid-cols-3">
+              <div className="text-gray-500">
+                {order.userEmail}
+                </div>
+              <div className="text-center">
+                <span
+                  className={
+                    (order.paid ? 'bg-green-500 ' : 'bg-red-500 ')
+                    + 'p-2 rounded-md text-white'
+                  }
+                >
+                  {order.paid ? 'Paid' : 'Not paid'}
+                </span>
+              </div>
+              <div className="text-right">{dbTimeForHuman(order.createdAt)}</div>
+            </div>
+          ))}
       </div>
-      {orders?.length > 0 &&
-        orders.map((order) => <div key={order._id}>{order.createdAt}</div>)}
     </section>
   );
 }

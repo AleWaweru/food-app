@@ -6,6 +6,7 @@ import User from "../../../models/User"
 import GoogleProvider from "next-auth/providers/google";
 import clientPromise from "../../../lib/mongoConnect";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
+import UserInfo from "@/app/models/UserInfo";
 
 export const authOptions = {
     secret: process.env.SECRET,
@@ -30,8 +31,6 @@ export const authOptions = {
                 const user = await User.findOne({email});
                 const passwordOk = user && bcrypt.compareSync(password, user.password);
 
-                console.log({passwordOk});
-
                 if(passwordOk){
                     return user;
                 }
@@ -40,6 +39,20 @@ export const authOptions = {
         })
     ],
 }
+
+export async function isAdmin() {
+    const session = await getServerSession(authOptions);
+    const userEmail = session?.user?.email;
+    if (!userEmail) {
+      return false;
+    }
+    const userInfo = await UserInfo.findOne({email:userEmail});
+    if (!userInfo) {
+      return false;
+    }
+    return userInfo.admin;
+  }
+
 const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
