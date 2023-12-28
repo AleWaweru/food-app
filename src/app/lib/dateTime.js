@@ -1,6 +1,3 @@
-export default function dbTimeForHuman(str) {
-    const formattedTime = str.replace('T', ' ').substring(0, 16);
-    console.log("Formatted Time:", formattedTime);
-    return formattedTime;
-  }
-  
+export function dbTimeForHuman(str) {
+  return str.replace("T", " ").substring(0, 16);
+}
