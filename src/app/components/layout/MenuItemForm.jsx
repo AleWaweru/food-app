@@ -37,7 +37,9 @@ export default function MenuItemForm({ onSubmit, menuItems }) {
       }
       className="mt-8 max-w-2xl mx-auto"
     >
-      <div className="flex gap-2 items-start">
+      <div className="md:grid gap-2 items-start"
+      style={{gridTemplateColumns:'.3fr .7fr'}}
+      >
         <div className="max-w-[200px]">
         <EditableImage link={image} setLink={setImage} />
         </div>

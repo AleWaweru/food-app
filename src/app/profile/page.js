@@ -62,10 +62,6 @@ const ProfilePage = () => {
     });
   }
 
-  // Event Handler for Profile Image Upload
-  
-
-  // Render
   if (status === "loading" || !profileFetched) {
     return "loading...";
   }

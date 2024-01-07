@@ -36,9 +36,9 @@ export default function OrderPage() {
           orders.map((order) => (
             <div
               key={order._id}
-              className="bg-gray-100 flex mb-2 items-center p-4 rounded-lg gap-6"
+              className="bg-gray-100 flex flex-col md:flex-row mb-2 items-center p-4 rounded-lg gap-6"
             >
-              <div className="grow flex items-center gap-4">
+              <div className="grow flex flex-col md:flex-row items-center gap-4">
                 <div>
                   <div
                     className={

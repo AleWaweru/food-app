@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-import NextAuth from "next-auth"
+import NextAuth, {getServerSession} from "next-auth";
 import bcrypt from "bcrypt";
-import CredentialsProvider from "next-auth/providers/credentials"
-import User from "../../../models/User"
+import CredentialsProvider from "next-auth/providers/credentials";
+import User from "../../../models/User";
 import GoogleProvider from "next-auth/providers/google";
 import clientPromise from "../../../lib/mongoConnect";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";

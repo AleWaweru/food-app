@@ -20,7 +20,7 @@ function HomeMenu() {
     <section className="">
       <div className="absolute left-0 right-0">
         <div className="h-48 w-48 absolute left-0 -z-10 overflow-clip">
-          <Image src={"/sallad1.png"} width={120} height={120} alt={"pizza"} />
+          <Image src={"/sallad1.png"} width={120} height={120} alt={"pizza"} sizes="100px" />
         </div>
         <div className="h-35 w-44 absolute right-0 -z-14 ml-[-200px] overflow-hidden background-hidden">
           <Image
@@ -29,6 +29,7 @@ function HomeMenu() {
             width={100}
             height={195}
             alt={"pizza"}
+            sizes="100px"
           />
         </div>
       </div>
@@ -38,10 +39,10 @@ function HomeMenu() {
        mainHeader={'Most Rated Meals'}
        />
       </div>
-      <div className="grid grid-cols-3 gap-4 m-4 overflow-hidden">
+      <div className="grid sm:grid-cols-3 gap-4 m-4 ">
       {bestSeller?.length > 0 && bestSeller.map(
         item => (
-          <MenuItems {...item}/>
+          <MenuItems key={item._id} {...item}/>
         )
       )}
       </div>

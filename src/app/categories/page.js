@@ -113,7 +113,7 @@ export default function Categories() {
             />
           </div>
           <div className="pb-4 flex gap-2">
-            <button type="submit">{editCategory ? "Update" : "Create"}</button>
+            <button type="submit">{editCategory ? "Update" : "Create"} </button>
             <button
               type="button"
               onClick={() => {
@@ -133,7 +133,7 @@ export default function Categories() {
           categories.map((c) => (
             <div
               className="bg-gray-100 rounded-xl p-2 px-4 flex gap-1 mb-1 items-center"
-              key={c.id}
+              key={c._id}
             >
               <div className="grow ">{c.name}</div>
               <div className="gap-1 flex ">

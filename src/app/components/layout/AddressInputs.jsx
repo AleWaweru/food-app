@@ -11,7 +11,7 @@ export default function AddressInputs({
         disabled={disabled}
         type="tel"
         placeholder="Phone"
-        value={phone}
+        value={phone || ''}
         onChange={(e) => setAddressProps(e.target.value)}
       />
 
@@ -22,7 +22,7 @@ export default function AddressInputs({
             disabled={disabled}
             type="text"
             placeholder="Postal Code"
-            value={postal}
+            value={postal || ''}
             onChange={(e) => setAddressProps("postal", e.target.value)}
           />
         </div>
@@ -33,7 +33,7 @@ export default function AddressInputs({
             disabled={disabled}
             type="text"
             placeholder="City"
-            value={city}
+            value={city || ''}
             onChange={(e) => setAddressProps("city", e.target.value)}
           />
         </div>
@@ -44,7 +44,7 @@ export default function AddressInputs({
         disabled={disabled}
         type="text"
         placeholder="Street Address"
-        value={address}
+        value={address || ''}
         onChange={(e) => setAddressProps("address", e.target.value)}
       />
 
@@ -53,7 +53,7 @@ export default function AddressInputs({
         disabled={disabled}
         type="text"
         placeholder="Country"
-        value={country}
+        value={country || ''}
         onChange={(e) => setAddressProps("country", e.target.value)}
       />
     </>

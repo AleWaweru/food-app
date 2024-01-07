@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import MenuItems from "../components/layout/menus/MenuItems";
 import SectionMenu from "@/app/components/layout/menus/SectionMenu";
+
 export default function MenuPage() {
     const [categories, setCategories] = useState([]);
     const [menuItems, setMenuItems] = useState([]);
@@ -19,13 +20,13 @@ export default function MenuPage() {
     return(
         <section className="mt-8">
             {categories?.length > 0 && categories.map(c => (
-                <div>
+                <div key={c._id}> 
                     <div className="text-center">
                         <SectionMenu mainHeader={c.name}/>
                     </div>
-                    <div className="grid grid-cols-3 gap-4 mt-6 mb-12">
+                    <div  className="grid sm:grid-cols-3 gap-4 mt-6 mb-12">
                     {menuItems.filter(item => item.category === c._id).map(item => (
-                        <MenuItems{...item}/>
+                        <MenuItems key={item._id} {...item}/>
                     ))}
 
                     </div>

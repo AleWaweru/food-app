@@ -81,9 +81,9 @@ const MenuItems = (menuItem) => {
                 <div className="py-2">
                   <h3 className="text-center text-gray-700">Pick your size</h3>
                   {sizes.map((size) => (
-                    <label className="flex items-center gap-2 p-3 border rounded-md mb-1">
+                    <label key={size._id} className="flex items-center gap-2 p-3 border rounded-md mb-1">
                       <input
-                        onClick={() => setSelectedSize(size)}
+                        onChange={() => setSelectedSize(size)}
                         checked={selectedSize?.name === size.name}
                         type="radio"
                         name="size"
@@ -97,9 +97,10 @@ const MenuItems = (menuItem) => {
                 <div className="py-2">
                   <h3 className="text-center text-gray-700">Any Extras?</h3>
                   {extraIngredientPrices.map((extraThing) => (
-                    <label className="flex items-center gap-2 p-3 border rounded-md mb-1">
+                    <label key={extraThing._id} className="flex items-center gap-2 p-3 border rounded-md mb-1">
                       <input
-                        onClick={(ev) => handleExtraThingClick(ev, extraThing)}
+                        onChange={(ev) => handleExtraThingClick(ev, extraThing)}
+                        checked={selectedExtras.map(e => e._id).includes(extraThing._id)}
                         type="checkbox"
                         name={extraThing.name}
                       />
