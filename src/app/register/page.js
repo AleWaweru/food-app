@@ -3,6 +3,7 @@ import React from "react";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import {signIn} from "next-auth/react"
 
 const RegisterPage = () => {
   const [email, setEmail] = useState("");
@@ -32,8 +33,10 @@ const RegisterPage = () => {
     setCreatingUser(false);
   }
   return (
-    <section>
-      <h1 className="text-center text-primary text-4xl">Register</h1>
+    <section className="mt-8">
+      <h1 className="text-center text-primary text-4xl">
+        Register
+        </h1>
       {userCreated && (
         <div className="my-4 text-center">
           User created. Now you can{" "}

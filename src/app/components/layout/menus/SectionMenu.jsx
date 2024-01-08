@@ -6,7 +6,7 @@ const SectionMenu = ({subHeader, mainHeader}) => {
      <h3 className="uppercase text-gray-500 font-semibold leading-4">
           {subHeader}
         </h3>
-        <h2 className="text-primary font-semibold italic text-4xl">{mainHeader}</h2>
+        <h2 className="text-primary font-semibold italic mt-5 mb-3 text-4xl">{mainHeader}</h2>
     </>
   )
 }

@@ -5,18 +5,20 @@ export default function EditableImage({ link, setLink }) {
   async function handleProfileImage(e) {
     const files = e.target.files;
     if (files?.length === 1) {
-      const data = new FormData;
+      const data = new FormData();
       data.set('file', files[0]);
 
       const uploadPromise = fetch('/api/upload', {
         method: 'POST',
         body: data,
-      }).then (async response => {
+      }).then(async (response) => {
         if (response.ok) {
-          const link = await response.json();
-          setLink(link);
+          const newLink = await response.json();
+          setLink(newLink);
+          return newLink; 
+        } else {
+          throw new Error('Something went wrong');
         }
-        throw new Error('Something went wrong');
       });
 
       await toast.promise(uploadPromise, {

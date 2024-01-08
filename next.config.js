@@ -16,7 +16,7 @@ const nextConfig = {
 
 module.exports = {
   ...nextConfig,
-  experimental: {
-    isr: false,
-  },
+  // experimental: {
+  //   isr: false,
+  // },
 }

@@ -17,8 +17,8 @@ function HomeMenu() {
     })
   })
   return (
-    <section className="">
-      <div className="absolute left-0 right-0">
+    <section className="mt-4">
+      <div className="absolute left-0 right-0 mt-5">
         <div className="h-48 w-48 absolute left-0 -z-10 overflow-clip">
           <Image src={"/sallad1.png"} width={120} height={120} alt={"pizza"} sizes="100px" />
         </div>
@@ -39,7 +39,7 @@ function HomeMenu() {
        mainHeader={'Most Rated Meals'}
        />
       </div>
-      <div className="grid sm:grid-cols-3 gap-4 m-4 ">
+      <div className="grid sm:grid-cols-3 gap-4 ">
       {bestSeller?.length > 0 && bestSeller.map(
         item => (
           <MenuItems key={item._id} {...item}/>
